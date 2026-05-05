@@ -1,0 +1,722 @@
+/* ============================================================
+   LA BAGUETTERIA & DELICATEZZE — Carta Virtual (Flipbook)
+   Diseño: Libro de lujo con efecto de paso de página
+   ============================================================ */
+
+/* === Variables === */
+:root {
+  --gold:        #C5922A;
+  --gold-light:  #E8B84B;
+  --gold-pale:   rgba(197, 146, 42, 0.18);
+  --burgundy:    #8B1A2E;
+  --dark:        #130806;
+  --dark-mid:    #1C0A08;
+  --cream:       #FDF8F0;
+  --cream-mid:   #F5EDE0;
+  --text:        #2C1810;
+  --text-mid:    #5C3D2E;
+  --text-light:  #8A6A55;
+  --border:      rgba(197, 146, 42, 0.22);
+}
+
+/* === Reset === */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; }
+body {
+  font-family: 'Lato', sans-serif;
+  background: var(--dark);
+  overflow: hidden;
+  height: 100vh;      /* fallback */
+  height: 100dvh;     /* mobile: excludes browser chrome */
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============================================================
+   SCENE — Fondo general oscuro con viñeta
+   ============================================================ */
+.scene {
+  width: 100vw;
+  height: 100vh;    /* fallback */
+  height: 100dvh;   /* mobile: excludes browser chrome */
+  background:
+    radial-gradient(ellipse at 20% 60%, rgba(139, 26, 46, 0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 40%, rgba(197, 146, 42, 0.07) 0%, transparent 50%),
+    #130806;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* ============================================================
+   UI HEADER
+   ============================================================ */
+.ui-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 10px 24px 8px;
+  width: 100%;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 20;
+}
+
+.ui-logo-wrap {
+  display: flex;
+  align-items: center;
+}
+
+.ui-logo {
+  height: 38px;
+  width: auto;
+  filter: brightness(0) invert(1) opacity(0.75);
+  transition: opacity 0.3s;
+}
+
+.ui-section {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--gold);
+  letter-spacing: 0.12em;
+  min-width: 140px;
+  text-align: center;
+  opacity: 0.9;
+}
+
+/* ============================================================
+   STAGE — Área del libro
+   ============================================================ */
+.stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex: 1;
+  width: 100%;
+  padding: 0 8px 6px;
+  min-height: 0;
+}
+
+#book-wrap {
+  flex: 1;
+  max-width: 1100px;
+  height: 100%;
+  max-height: 780px;
+  position: relative;
+}
+
+/* ============================================================
+   NAVIGATION BUTTONS
+   ============================================================ */
+.nav-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(197, 146, 42, 0.12);
+  border: 1px solid rgba(197, 146, 42, 0.30);
+  color: rgba(197, 146, 42, 0.80);
+  font-size: 32px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.22s ease;
+  user-select: none;
+}
+.nav-btn:hover {
+  background: rgba(197, 146, 42, 0.22);
+  border-color: rgba(197, 146, 42, 0.55);
+  color: var(--gold-light);
+  transform: scale(1.07);
+}
+.nav-btn:active { transform: scale(0.95); }
+
+/* ============================================================
+   HINT
+   ============================================================ */
+.ui-hint {
+  font-family: 'Lato', sans-serif;
+  font-size: 10px;
+  color: rgba(197, 146, 42, 0.38);
+  letter-spacing: 0.12em;
+  padding: 4px 0 8px;
+  flex-shrink: 0;
+  transition: opacity 0.6s ease;
+  text-align: center;
+}
+
+/* ============================================================
+   PAGE BASE
+   ============================================================ */
+.page {
+  background: var(--cream);
+  overflow: hidden;
+  position: relative;
+  user-select: none;
+}
+
+/* ============================================================
+   PORTADA / CONTRAPORTADA
+   ============================================================ */
+.pg-cover {
+  background: var(--dark);
+}
+
+.pg-cover-front {
+  background:
+    radial-gradient(ellipse at 50% 85%, rgba(139, 26, 46, 0.55) 0%, transparent 60%),
+    radial-gradient(ellipse at 50% 15%, rgba(197, 146, 42, 0.10) 0%, transparent 50%),
+    #130806;
+}
+
+.cv-inner,
+.cv-back-inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 13px;
+  padding: 44px 52px;
+  text-align: center;
+}
+
+.cv-orn {
+  font-size: 13px;
+  color: var(--gold);
+  letter-spacing: 8px;
+  opacity: 0.7;
+}
+.cv-orn2 {
+  font-size: 18px;
+  color: var(--gold);
+  letter-spacing: 10px;
+  opacity: 0.45;
+}
+
+.cv-logo {
+  width: clamp(100px, 30%, 148px);
+  filter: brightness(0) invert(1);
+  margin: 4px 0;
+}
+
+.cv-rule {
+  width: 110px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold), transparent);
+}
+
+.cv-h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(22px, 4vw, 30px);
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.04em;
+}
+
+.cv-h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(14px, 2.5vw, 19px);
+  font-weight: 400;
+  font-style: italic;
+  color: var(--gold);
+  margin-top: -8px;
+}
+
+.cv-tag {
+  font-size: clamp(8px, 1.2vw, 10.5px);
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+/* Contraportada */
+.pg-cover-back {
+  background:
+    radial-gradient(ellipse at 50% 50%, rgba(197, 146, 42, 0.07) 0%, transparent 65%),
+    #130806;
+}
+
+.cv-back-logo {
+  width: clamp(70px, 22%, 100px);
+  filter: brightness(0) invert(1) opacity(0.55);
+  margin: 4px 0;
+}
+
+.cv-back-name {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(13px, 2vw, 16px);
+  color: rgba(255,255,255,0.65);
+}
+
+.cv-back-tag {
+  font-size: clamp(7px, 1vw, 9.5px);
+  color: rgba(197, 146, 42, 0.5);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   PÁGINA INTRO
+   ============================================================ */
+.pg-intro {
+  background: linear-gradient(160deg, var(--cream) 0%, var(--cream-mid) 100%);
+}
+
+.intro-inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 40px 44px;
+  text-align: center;
+}
+
+.intro-orn {
+  font-size: 11px;
+  color: var(--gold);
+  letter-spacing: 8px;
+  opacity: 0.7;
+}
+
+.intro-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(20px, 3.5vw, 26px);
+  font-weight: 700;
+  color: var(--burgundy);
+}
+
+.intro-rule {
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold), transparent);
+}
+
+.intro-text {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: clamp(10px, 1.6vw, 12px);
+  color: var(--text-mid);
+  line-height: 1.75;
+  max-width: 320px;
+}
+
+.intro-idx {
+  width: 100%;
+  margin-top: 6px;
+}
+
+.intro-idx-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(197, 146, 42, 0.18);
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(11px, 1.7vw, 13px);
+  color: var(--text);
+}
+
+.idx-dot {
+  color: var(--gold);
+  font-size: 9px;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   PÁGINA DE IMAGEN COMPLETA
+   ============================================================ */
+.pg-img {
+  background: var(--dark);
+  padding: 0;
+}
+
+.pg-img-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+.pg-img-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(13, 5, 2, 0.90) 0%,
+    rgba(13, 5, 2, 0.30) 40%,
+    transparent 70%
+  );
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: clamp(28px, 6%, 48px);
+}
+
+.img-label-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.img-rule {
+  width: 55px;
+  height: 1px;
+  background: rgba(197, 146, 42, 0.75);
+}
+
+.img-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(22px, 4.5vw, 34px);
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 2px 16px rgba(0,0,0,0.6);
+  letter-spacing: 0.04em;
+}
+
+/* ============================================================
+   PÁGINA DE MENÚ
+   ============================================================ */
+.pg-menu {
+  background: linear-gradient(170deg, var(--cream) 0%, var(--cream-mid) 100%);
+  display: flex;
+  flex-direction: column;
+  padding: clamp(18px, 4%, 28px) clamp(20px, 5%, 32px) clamp(12px, 3%, 20px);
+}
+
+/* Page header */
+.ph {
+  text-align: center;
+  margin-bottom: clamp(10px, 2%, 16px);
+  flex-shrink: 0;
+}
+
+.ph-orn {
+  font-size: 10px;
+  color: var(--gold);
+  letter-spacing: 6px;
+  opacity: 0.7;
+  margin-bottom: 5px;
+}
+
+.pt {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(17px, 3.2vw, 22px);
+  font-weight: 700;
+  color: var(--burgundy);
+  margin-bottom: 7px;
+}
+
+.ph-rule {
+  width: 70px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold), transparent);
+  margin: 0 auto;
+}
+
+/* Menu list */
+.pl {
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Compact variant */
+.pl-compact .mi {
+  padding: 3.5px 0;
+}
+
+/* Subsection header */
+.ms {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: clamp(9px, 1.5vw, 11px);
+  color: var(--gold);
+  letter-spacing: 0.1em;
+  padding: 7px 0 3px;
+  border-bottom: 1px solid rgba(197, 146, 42, 0.45);
+  margin-bottom: 2px;
+}
+
+/* Menu item */
+.mi {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 4.5px 0;
+  border-bottom: 1px solid rgba(197, 146, 42, 0.15);
+}
+
+.mi-l {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Item name */
+.mn {
+  display: block;
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(10.5px, 1.8vw, 13px);
+  font-weight: 400;
+  color: var(--text);
+  line-height: 1.35;
+}
+
+/* Item description */
+.md {
+  display: block;
+  font-size: clamp(9px, 1.4vw, 10.5px);
+  color: var(--text-light);
+  font-style: italic;
+  line-height: 1.3;
+  margin-top: 1px;
+}
+
+/* Sub-name (inline) */
+.mn-sub {
+  font-size: 0.78em;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--text-light);
+}
+
+/* Item price */
+.mp {
+  font-family: 'Lato', sans-serif;
+  font-size: clamp(10.5px, 1.8vw, 13px);
+  font-weight: 700;
+  color: var(--burgundy);
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+/* Featured item */
+.mi-f .mn { color: var(--burgundy); font-weight: 600; }
+.mi-f { background: linear-gradient(to right, rgba(139, 26, 46, 0.04), transparent); }
+
+/* Badge */
+.mbadge {
+  font-size: 8px;
+  background: var(--gold);
+  color: #fff;
+  padding: 1px 5px;
+  border-radius: 10px;
+  font-family: 'Lato', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  vertical-align: middle;
+  margin-left: 5px;
+}
+
+/* Page footer */
+.pf {
+  text-align: center;
+  padding-top: 6px;
+  flex-shrink: 0;
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: clamp(9px, 1.4vw, 11px);
+  color: rgba(197, 146, 42, 0.50);
+}
+
+/* Thanks footer (additional) */
+.pg-thanks {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  flex-shrink: 0;
+}
+
+.thanks-rule {
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold), transparent);
+}
+
+.thanks-text {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: clamp(11px, 1.8vw, 14px);
+  color: var(--gold);
+  letter-spacing: 0.08em;
+}
+
+/* ============================================================
+   PÁGINA DECORATIVA
+   ============================================================ */
+.pg-deco {
+  background: linear-gradient(160deg, var(--cream) 0%, var(--cream-mid) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.deco-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+}
+
+.deco-orn {
+  font-size: clamp(40px, 8vw, 65px);
+  color: rgba(197, 146, 42, 0.20);
+  line-height: 1;
+}
+
+.deco-logo {
+  width: clamp(70px, 20%, 110px);
+  opacity: 0.20;
+  filter: sepia(1);
+}
+
+.deco-orn2 {
+  font-size: 22px;
+  color: rgba(197, 146, 42, 0.25);
+  letter-spacing: 12px;
+}
+
+.deco-text {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: clamp(10px, 1.6vw, 13px);
+  color: rgba(197, 146, 42, 0.30);
+  letter-spacing: 0.1em;
+}
+
+/* ============================================================
+   BOTTOM NAV — visible only on mobile/touch screens
+   ============================================================ */
+.bottom-nav {
+  display: none;               /* shown via media query */
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 8px 22px 14px;
+  flex-shrink: 0;
+  gap: 12px;
+}
+
+.bnav-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(197, 146, 42, 0.15);
+  border: 1.5px solid rgba(197, 146, 42, 0.40);
+  color: var(--gold-light);
+  font-size: 38px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.18s, transform 0.12s;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  user-select: none;
+}
+.bnav-btn:active {
+  background: rgba(197, 146, 42, 0.30);
+  transform: scale(0.91);
+}
+
+.bnav-info {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 13px;
+  color: var(--gold);
+  text-align: center;
+  flex: 1;
+  opacity: 0.88;
+  letter-spacing: 0.07em;
+}
+
+/* ============================================================
+   RESPONSIVE — Teléfono · Tablet · Laptop
+   ============================================================ */
+
+/* ── Teléfono pequeño (≤ 374px) ── */
+@media (max-width: 374px) {
+  .ui-header    { padding: 7px 10px 5px; gap: 6px; }
+  .ui-logo      { height: 24px; }
+  .ui-section   { display: none; }
+  .stage        { padding: 0; }
+  .bottom-nav   { padding: 6px 14px 10px; }
+  .bnav-btn     { width: 48px; height: 48px; font-size: 34px; }
+  .bnav-info    { font-size: 11px; }
+}
+
+/* ── Teléfono (≤ 599px) — portrait ── */
+@media (max-width: 599px) {
+  /* Ocultar botones laterales: el swipe y el bottom-nav manejan la navegación */
+  .nav-btn      { display: none; }
+  .bottom-nav   { display: flex; }
+  .ui-hint      { display: none; }
+
+  /* Header compacto */
+  .ui-header    { padding: 8px 16px 5px; gap: 8px; }
+  .ui-logo      { height: 28px; }
+  .ui-section   { font-size: 12px; min-width: 90px; letter-spacing: 0.07em; }
+
+  /* Stage usa todo el ancho disponible */
+  .stage        { gap: 0; padding: 0; }
+}
+
+/* ── Teléfono landscape (ancho ≤ 767px, rotado) ── */
+@media (max-width: 767px) and (orientation: landscape) {
+  .nav-btn      { display: none; }
+  .bottom-nav   { display: flex; padding: 4px 18px 7px; }
+  .bnav-btn     { width: 44px; height: 44px; font-size: 32px; }
+  .stage        { gap: 0; padding: 0; }
+  .ui-header    { padding: 4px 14px 3px; }
+  .ui-logo      { height: 21px; }
+  .ui-section   { font-size: 11px; }
+  .ui-hint      { display: none; }
+}
+
+/* ── Landscape muy bajo (≤ 400px de alto) ── */
+@media (max-height: 400px) {
+  .bottom-nav   { padding: 3px 16px 5px; }
+  .bnav-btn     { width: 38px; height: 38px; font-size: 28px; }
+  .bnav-info    { font-size: 11px; }
+  .ui-header    { padding: 3px 14px 2px; }
+  .ui-logo      { height: 18px; }
+}
+
+/* ── Tablet portrait (600px – 767px) ── */
+@media (min-width: 600px) and (max-width: 767px) {
+  .ui-header    { padding: 9px 20px 7px; }
+  .ui-logo      { height: 32px; }
+  .nav-btn      { width: 40px; height: 40px; font-size: 26px; }
+  .stage        { gap: 8px; padding: 0 6px 6px; }
+  #book-wrap    { max-height: 700px; }
+}
+
+/* ── Tablet landscape / laptop pequeño (768px – 1023px) ── */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .ui-header    { padding: 10px 24px 8px; }
+  .ui-logo      { height: 34px; }
+  .nav-btn      { width: 44px; height: 44px; font-size: 28px; }
+  .stage        { gap: 12px; }
+}
+
+/* ── Laptop / escritorio (≥ 1024px) ── */
+@media (min-width: 1024px) {
+  .nav-btn      { width: 52px; height: 52px; font-size: 34px; }
+  .stage        { gap: 18px; }
+}

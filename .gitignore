@@ -1,0 +1,10 @@
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# PDFs de la carta (fuente)
+*.pdf
+
+# Vercel
+.vercel
