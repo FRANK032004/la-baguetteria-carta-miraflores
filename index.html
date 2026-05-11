@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>La Baguetteria & Delicatezze · Carta Virtual Miraflores</title>
   <meta name="description" content="Carta virtual de La Baguetteria & Delicatezze — Miraflores. Pan artesanal, café, sándwiches, postres y más." />
   <link rel="icon" type="image/png" href="favicon.png" />
@@ -560,6 +560,13 @@
   });
 
   pf.loadFromHTML(document.querySelectorAll('.page'));
+
+  // Recalcular libro al cambiar tamaño de ventana u orientación
+  let _resizeTimer;
+  window.addEventListener('resize', function () {
+    clearTimeout(_resizeTimer);
+    _resizeTimer = setTimeout(function () { pf.update(); }, 300);
+  });
 
   document.getElementById('prev-btn').onclick = () => pf.flipPrev();
   document.getElementById('next-btn').onclick = () => pf.flipNext();
