@@ -11,6 +11,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <link rel="preload" as="image" href="IMG 02.webp" />
+  <link rel="preload" as="image" href="IMG 01.webp" />
 </head>
 <body>
 
@@ -521,14 +523,19 @@
     <button class="nav-btn nav-next" id="next-btn" aria-label="Siguiente página">&#8250;</button>
   </div><!-- /.stage -->
 
-  <div class="ui-hint" id="ui-hint">Desliza o toca los bordes del libro para pasar páginas</div>
+  <div class="ui-hint" id="ui-hint" style="display:none"></div>
 
-  <!-- BOTTOM NAV — visible only on mobile/touch screens -->
-  <nav class="bottom-nav" id="bottom-nav" aria-label="Navegación de páginas">
-    <button class="bnav-btn" id="bprev-btn" aria-label="Página anterior">&#8249;</button>
-    <span class="bnav-info" id="bnav-info">Portada</span>
-    <button class="bnav-btn" id="bnext-btn" aria-label="Siguiente página">&#8250;</button>
-  </nav>
+  <!-- SWIPE HINT OVERLAY -->
+  <div class="swipe-hint" id="swipe-hint" aria-hidden="true">
+    <div class="swipe-hint-card">
+      <div class="swipe-hint-orn">✦ &nbsp; ✦ &nbsp; ✦</div>
+      <span class="swipe-hint-anim">☞</span>
+      <p class="swipe-hint-title">Desliza para explorar</p>
+      <p class="swipe-hint-sub">nuestra carta</p>
+      <div class="swipe-hint-rule"></div>
+      <p class="swipe-hint-note">Toca o desliza el libro para pasar las páginas</p>
+    </div>
+  </div>
 
 </div><!-- /.scene -->
 
@@ -556,8 +563,29 @@
 
   document.getElementById('prev-btn').onclick = () => pf.flipPrev();
   document.getElementById('next-btn').onclick = () => pf.flipNext();
-  document.getElementById('bprev-btn').onclick = () => pf.flipPrev();
-  document.getElementById('bnext-btn').onclick = () => pf.flipNext();
+
+  // Lazy-load imágenes de fondo
+  if ('IntersectionObserver' in window) {
+    const lazyPages = document.querySelectorAll('.pg-img-bg[style*="url("]');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const el = e.target;
+          const bg = el.getAttribute('data-bg');
+          if (bg) { el.style.backgroundImage = `url('${bg}')`; }
+          obs.unobserve(el);
+        }
+      });
+    }, { rootMargin: '200px' });
+    lazyPages.forEach(el => {
+      const match = el.style.backgroundImage.match(/url\(['"](.*?)['"]\)/);
+      if (match) {
+        el.setAttribute('data-bg', match[1]);
+        el.style.backgroundImage = '';
+        obs.observe(el);
+      }
+    });
+  }
 
   const sections = [
     'Portada', 'Bienvenida',
@@ -574,10 +602,23 @@
   pf.on('flip', function(e) {
     const label = sections[e.data] || '';
     document.getElementById('ui-section').textContent = label;
-    document.getElementById('bnav-info').textContent = label;
-    const hint = document.getElementById('ui-hint');
-    if (hint) { hint.style.opacity = '0'; hint.style.pointerEvents = 'none'; }
+    dismissHint();
   });
+
+  // Swipe hint — se muestra en cada visita, desaparece a los 4s o al primer toque
+  const swipeHint = document.getElementById('swipe-hint');
+  function dismissHint() {
+    if (!swipeHint || swipeHint.classList.contains('hiding')) return;
+    swipeHint.classList.remove('visible');
+    swipeHint.classList.add('hiding');
+    setTimeout(() => { if (swipeHint.parentNode) swipeHint.remove(); }, 700);
+  }
+  if (swipeHint) {
+    setTimeout(() => swipeHint.classList.add('visible'), 400);
+    const autoHide = setTimeout(dismissHint, 4500);
+    swipeHint.addEventListener('touchstart', () => { clearTimeout(autoHide); dismissHint(); }, { once: true, passive: true });
+    swipeHint.addEventListener('click',      () => { clearTimeout(autoHide); dismissHint(); }, { once: true });
+  }
 </script>
 
 </body>
