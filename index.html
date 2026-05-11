@@ -525,6 +525,13 @@
 
   <div class="ui-hint" id="ui-hint" style="display:none"></div>
 
+  <!-- BOTTOM NAV — flechas móvil -->
+  <nav class="bottom-nav" id="bottom-nav" aria-label="Navegación de páginas">
+    <button class="bnav-btn" id="bprev-btn" aria-label="Página anterior">&#8249;</button>
+    <span class="bnav-info" id="bnav-info">Portada</span>
+    <button class="bnav-btn" id="bnext-btn" aria-label="Siguiente página">&#8250;</button>
+  </nav>
+
   <!-- SWIPE HINT OVERLAY -->
   <div class="swipe-hint" id="swipe-hint" aria-hidden="true">
     <div class="swipe-hint-card">
@@ -570,6 +577,8 @@
 
   document.getElementById('prev-btn').onclick = () => pf.flipPrev();
   document.getElementById('next-btn').onclick = () => pf.flipNext();
+  document.getElementById('bprev-btn').onclick = () => pf.flipPrev();
+  document.getElementById('bnext-btn').onclick = () => pf.flipNext();
 
   // Lazy-load imágenes de fondo
   if ('IntersectionObserver' in window) {
@@ -609,6 +618,8 @@
   pf.on('flip', function(e) {
     const label = sections[e.data] || '';
     document.getElementById('ui-section').textContent = label;
+    const bi = document.getElementById('bnav-info');
+    if (bi) bi.textContent = label;
     dismissHint();
   });
 
